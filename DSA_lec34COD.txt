@@ -1,0 +1,2683 @@
+/****************************
+Manish Kumar
+****************************/
+
+
+Single File Programming Question
+Problem Statement
+
+
+
+Veni is interested in data compression techniques, and she wants to implement Huffman coding to compress a given set of characters based on their frequencies. She is given a frequency table containing 'n' characters and their corresponding frequencies. Her task is to build a Huffman tree based on the given frequencies and output the Huffman codes for each character.
+
+
+
+Example
+
+
+
+Input 
+
+4
+
+a 5 b 9 c 12 d 13
+
+
+
+Output 
+
+Huffman codes:
+
+d: 000
+
+c: 001
+
+b: 01
+
+a: 1
+
+
+
+Explanation
+
+
+
+In Huffman coding, characters with higher frequencies are assigned shorter codes, ensuring efficient compression.
+
+In this example, character 'd' has the highest frequency (13), so it is assigned the shortest code '000'.
+
+Character 'c' has the second-highest frequency (12), so it is assigned the code '001'.
+
+Character 'b' has the third-highest frequency (9), so it is assigned the code '01'.
+
+Character 'a' has the lowest frequency (5), so it is assigned the code '1'.
+
+
+
+Note: This kind of question will help in clearing HCL recruitment.
+
+Input format :
+The input consists of several test cases.
+
+The first line of each test case contains an integer 'n', representing the number of characters in the frequency table.
+
+Each of the next 'n' lines contains two space-separated values: a lowercase character and its frequency.
+
+Output format :
+The output displays the compressed message using Huffman codes.
+
+
+
+Refer to the sample output for exact specifications.
+
+Code constraints :
+1 ≤ n ≤ 26
+
+1 ≤ frequency ≤ 100
+
+The input characters will be lowercase alphabets (a–z).
+
+Sample test cases :
+Input 1 :
+4
+a 5 b 9 c 12 d 13
+Output 1 :
+Huffman codes:
+d: 000
+c: 001
+b: 01
+a: 1
+
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+struct Node {
+    char data;
+    int frequency;
+    Node* left;
+    Node* right;
+    Node(char data, int frequency) : data(data), frequency(frequency), left(nullptr), right(nullptr) {}
+};
+void insertIntoArray(Node* nodes[], int& size, Node* node) {
+    int i = size - 1;
+    while (i >= 0 && nodes[i]->frequency > node->frequency) {
+        nodes[i + 1] = nodes[i];
+        i--;
+    }
+    nodes[i + 1] = node;
+    size++;
+}
+Node* buildHuffmanTree(char chars[], int frequencies[], int n) {
+    int maxSize = 2 * n - 1;
+    Node* nodes[maxSize];
+    int size = 0;
+    for (int i = 0; i < n; ++i) {
+        Node* node = new Node(chars[i], frequencies[i]);
+        nodes[size] = node;
+        size++;
+    }
+    while (size > 1) {
+        Node* leftNode = nodes[size - 1];
+        Node* rightNode = nodes[size - 2];
+        Node* combinedNode = new Node('\0', leftNode->frequency + rightNode->frequency);
+        combinedNode->left = leftNode;
+        combinedNode->right = rightNode;
+        size -= 2;
+        insertIntoArray(nodes, size, combinedNode);
+    }
+    return nodes[0];
+}
+void printHuffmanCodes(Node* root, std::string code) {
+    if (root == nullptr) {
+        return;
+    }
+    if (root->data != '\0') {
+        std::cout << root->data << ": " << code << std::endl;
+    }
+    printHuffmanCodes(root->left, code + "0");
+    printHuffmanCodes(root->right, code + "1");
+}
+void deleteTree(Node* root) {
+    if (root == nullptr) {
+        return;
+    }
+    deleteTree(root->left);
+    deleteTree(root->right);
+    delete root;
+}
+int main() {
+    int n;
+    cin >> n;
+    char chars[n];
+    int frequencies[n];
+    for (int i = 0; i < n; ++i) {
+        std::cin >> chars[i] >> frequencies[i];
+    }
+    Node* root = buildHuffmanTree(chars, frequencies, n);
+    cout << "Huffman codes:" << std::endl;
+    printHuffmanCodes(root, "");
+    deleteTree(root);
+    return 0;
+}
+
+
+
+Problem Statement
+
+
+
+You are designing a data compression tool that uses Huffman Coding to encode data efficiently. Write a program to accept a set of characters followed by their corresponding Huffman codes and generate the coded data.
+
+Input format :
+The first line contains an integer 'N', representing the number of characters to be encoded.
+
+The next 'N' lines contain a character 'C' and its corresponding Huffman code fixed-length code separated by a space.
+
+The third line of input consists of text or a word that needs to be encoded.
+
+Output format :
+The output consists of a single line containing the encoded data generated from the input text.
+
+
+
+Refer to the sample output for the formatting specifications.
+
+Code constraints :
+The character can be any printable ASCII character.
+
+The length of the Huffman code for each character will be at most 20 characters.
+
+The total length of the input text to be encoded will be at most 102characters.
+
+1 ≤ N ≤ 256
+
+Sample test cases :
+Input 1 :
+10
+D 0100
+U 0000
+F 0101
+M 0001
+A 0010
+N 0011
+C 1100
+O 1101
+E 1110
+H 1111
+HUFF
+Output 1 :
+Coded Data: 1111000001010101
+
+
+
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int MAX_CHARACTERS = 256;
+
+void generateCodedData(const string& input, const string codes[]) {
+    string encodedData;
+    for (char ch : input) {
+        encodedData += codes[ch];
+    }
+    cout << "Coded Data: " << encodedData << endl;
+}
+
+int main() {
+    char characters[MAX_CHARACTERS];
+    string codes[MAX_CHARACTERS];
+
+    int numCharacters;
+    cin >> numCharacters;
+
+    for (int i = 0; i < numCharacters; ++i) {
+        char ch;
+        string code;
+        cin >> ch >> code;
+        characters[i] = ch;
+        codes[ch] = code;
+    }
+
+    string input;
+    cin >> input;
+
+    generateCodedData(input, codes);
+
+    return 0;
+}
+
+
+
+Single File Programming Question
+Problem Statement
+
+
+
+You are tasked with implementing Huffman coding, a widely used data compression technique, to encode and decode data. Your goal is to take an input consisting of a set of characters along with their respective frequencies and encode a given text using the Huffman codes generated.
+
+
+
+There are two methods that you need to implement as part of this task.
+
+
+
+struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size); -> As part of this task, you need to call the createAndBuildMinHeap(data, freq, size) method and then proceed from there.
+
+                   
+
+void print_encoded_text(string text); -> You have to be able to store the codes you generated in the previous method and use the same to create the encoded text.
+
+
+
+Note: This kind of question will help in clearing TCS recruitment.
+
+Input format :
+The input consists of the following:
+
+The first line contains an integer, count, representing the number of characters provided as input.
+
+The next count lines each contain a character and its corresponding frequency separated by a space.
+
+The character is a single uppercase letter (a to z), and the frequency is an integer.
+
+Output format :
+The output displays the character and its frequencies.
+
+The output consists of the encoded data for the given input text.
+
+
+
+Refer to the sample output for formatting specifications.
+
+Code constraints :
+1 ≤ count ≤ 100
+
+1 ≤ frequency ≤ 1000
+
+Sample test cases :
+Input 1 :
+6 
+a 5
+b 9 
+c 12
+d 13
+e 16
+f 45
+bbacdef
+Output 1 :
+f: 0
+c: 100
+d: 101
+a: 1100
+b: 1101
+e: 111
+The encoded value for bbacdef is:
+1101110111001001011110
+
+
+
+#include <cstdlib>
+#include <iostream>
+#include <cstring>
+using namespace std;
+ 
+
+#define MAX_TREE_HT 100
+struct MinHeapNode {
+    char data;
+    unsigned freq;
+    struct MinHeapNode *left, *right;
+};
+struct MinHeap {
+    unsigned size;
+    unsigned capacity;
+    struct MinHeapNode** array;
+};
+ 
+struct MinHeapNode* newNode(char data, unsigned freq)
+{
+    struct MinHeapNode* temp = (struct MinHeapNode*)malloc(
+        sizeof(struct MinHeapNode));
+ 
+    temp->left = temp->right = NULL;
+    temp->data = data;
+    temp->freq = freq;
+ 
+    return temp;
+}
+ 
+struct MinHeap* createMinHeap(unsigned capacity)
+{
+    struct MinHeap* minHeap
+        = (struct MinHeap*)malloc(sizeof(struct MinHeap));
+    minHeap->size = 0;
+    minHeap->capacity = capacity;
+    minHeap->array = (struct MinHeapNode**)malloc(
+        minHeap->capacity * sizeof(struct MinHeapNode*));
+    return minHeap;
+}
+ 
+
+void swapMinHeapNode(struct MinHeapNode** a, struct MinHeapNode** b)
+{
+    struct MinHeapNode* t = *a;
+    *a = *b;
+    *b = t;
+}
+void minHeapify(struct MinHeap* minHeap, int idx)
+{
+    int smallest = idx;
+    int left = 2 * idx + 1;
+    int right = 2 * idx + 2;
+
+    if (left < minHeap->size
+        && minHeap->array[left]->freq
+               < minHeap->array[smallest]->freq)
+        smallest = left;
+ 
+    if (right < minHeap->size
+        && minHeap->array[right]->freq
+               < minHeap->array[smallest]->freq)
+        smallest = right;
+ 
+    if (smallest != idx) {
+        swapMinHeapNode(&minHeap->array[smallest],
+                        &minHeap->array[idx]);
+        minHeapify(minHeap, smallest);
+    }
+}
+
+int isSizeOne(struct MinHeap* minHeap)
+{
+    return (minHeap->size == 1);
+}
+ 
+
+struct MinHeapNode* extractMin(struct MinHeap* minHeap)
+{
+    struct MinHeapNode* temp = minHeap->array[0];
+    minHeap->array[0] = minHeap->array[minHeap->size - 1];
+ 
+    --minHeap->size;
+    minHeapify(minHeap, 0);
+ 
+    return temp;
+}
+ 
+
+void insertMinHeap(struct MinHeap* minHeap, struct MinHeapNode* minHeapNode)
+{
+    ++minHeap->size;
+    int i = minHeap->size - 1;
+    while (i
+           && minHeapNode->freq
+                  < minHeap->array[(i - 1) / 2]->freq) {
+ 
+        minHeap->array[i] = minHeap->array[(i - 1) / 2];
+        i = (i - 1) / 2;
+    }
+    minHeap->array[i] = minHeapNode;
+}
+ 
+void buildMinHeap(struct MinHeap* minHeap)
+{
+    int n = minHeap->size - 1;
+    int i;
+ 
+    for (i = (n - 1) / 2; i >= 0; --i)
+        minHeapify(minHeap, i);
+}
+
+int isLeaf(struct MinHeapNode* root)
+{
+    return !(root->left) && !(root->right);
+}
+ 
+struct MinHeap* createAndBuildMinHeap(char data[], int freq[], int size)
+{
+    struct MinHeap* minHeap = createMinHeap(size);
+    for (int i = 0; i < size; ++i)
+        minHeap->array[i] = newNode(data[i], freq[i]);
+    minHeap->size = size;
+    buildMinHeap(minHeap);
+    return minHeap;
+}
+ 
+struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size);
+void print_encoded_text(string text);
+struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size)
+{
+    struct MinHeapNode *left, *right, *top;
+    struct MinHeap* minHeap = createAndBuildMinHeap(data, freq, size);
+    while (!isSizeOne(minHeap)) {
+        left = extractMin(minHeap);
+        right = extractMin(minHeap);
+ 
+        top = newNode('$', left->freq + right->freq);
+ 
+        top->left = left;
+        top->right = right;
+ 
+        insertMinHeap(minHeap, top);
+    }
+ 
+    return extractMin(minHeap);
+}
+ 
+string codes[1000];
+char chars[1000];
+static int ci = 0;
+string printArr(int arr[], int n)
+{
+    string s = "";
+    int i;
+    for (i = 0; i < n; ++i){
+        cout << arr[i];
+        s = s+to_string(arr[i]);
+    }
+ 
+    cout << "\n";
+    return s;
+}
+
+void printCodes(struct MinHeapNode* root, int arr[], int top)
+{
+
+    if (root->left) {
+        arr[top] = 0;
+        printCodes(root->left, arr, top + 1);
+    }
+    if (root->right) {
+        arr[top] = 1;
+        printCodes(root->right, arr, top + 1);
+    }
+
+    if (isLeaf(root)) {
+        cout << root->data << ": ";
+        chars[ci] = root->data;
+        codes[ci++]=printArr(arr, top);
+    }
+}
+
+
+void print_encoded_text(string text){
+        cout<<"The encoded value for "<<text<<" is:"<<endl;
+        for(int i=0;i<text.length();i++){
+            for(int j=0;j<ci;j++){
+                if(text.at(i)==chars[j]){
+                    cout<<codes[j]<<"";
+                }
+            }
+        }
+        cout<<endl;
+}
+
+
+void HuffmanCodes(char data[], int freq[], int size)
+{
+    struct MinHeapNode* root = buildHuffmanTree(data, freq, size);
+    int arr[MAX_TREE_HT], top = 0;
+    printCodes(root, arr, top);
+}
+int main()
+{
+	int count;
+	cin>>count;
+
+	char arr[count];
+	int freq[count];
+	for(int i=0;i<count;i++){
+		cin>>arr[i]>>freq[i];
+	}
+	int size = sizeof(arr) / sizeof(arr[0]);
+
+	HuffmanCodes(arr, freq, size);
+	string text;
+	cin>>text;
+	print_encoded_text(text);
+
+	return 0;
+}
+ 
+
+
+Problem Statement:
+
+
+
+Rathi is a computer scientist who wants to perform a statistical analysis of the Huffman tree. She is given a frequency table that contains characters and their corresponding frequencies. The Huffman tree is built using these frequencies, and she wants to calculate and print the average code length and the expected code length for each character based on their frequencies.
+
+
+
+Note: This kind of question will help in clearing Wipro recruitment.
+
+Input format :
+The first line of input contains an integer, 'n', representing the number of characters in the frequency table.
+
+The next 'n' lines contain character-frequency pairs separated by a space.
+
+Each line contains a character (a single lowercase English alphabet) and its corresponding positive integer frequency.
+
+Output format :
+The output displays that the program should output the generated Huffman codes for each character in the following format: <character>: <Huffman_code> (Code Length: <code_length>)
+
+After printing the Huffman codes, the program should calculate and output the average code length and the expected code length.
+
+
+
+Refer to the sample output for the exact specifications.
+
+Code constraints :
+The characters are alphanumeric (lowercase and uppercase letters and digits).
+
+The frequencies are positive integers.
+
+The Huffman codes are valid binary codes (consisting of '0' and '1').
+
+The sum of frequencies will not exceed 109.
+
+1 <= count <= 15
+
+1 ≤ n ≤ 26 (number of characters)
+
+1 ≤ frequency ≤ 100 (frequency of each character)
+
+Sample test cases :
+Input 1 :
+7
+a 10 
+e 15 
+i 12 
+o 3 
+u 4 
+s 13 
+t 1 
+Output 1 :
+Huffman codes:
+t: 000000 (Code Length: 6)
+s: 000001 (Code Length: 6)
+u: 00001 (Code Length: 5)
+o: 0001 (Code Length: 4)
+i: 001 (Code Length: 3)
+e: 01 (Code Length: 2)
+a: 1 (Code Length: 1)
+Average Code Length: 3.31034
+Expected Code Length: 4
+
+
+
+#include <iostream>
+#include <string>
+#include <cmath>
+using namespace std;
+struct Node {
+    char data;
+    int frequency;
+    Node* left;
+    Node* right;
+
+    Node(char data, int frequency) : data(data), frequency(frequency), left(nullptr), right(nullptr) {}
+};
+
+void insertIntoArray(Node* nodes[], int& size, Node* node) {
+    int i = size - 1;
+    while (i >= 0 && nodes[i]->frequency > node->frequency) {
+        nodes[i + 1] = nodes[i];
+        i--;
+    }
+    nodes[i + 1] = node;
+    size++;
+}
+
+Node* buildHuffmanTree(char chars[], int frequencies[], int n) {
+    int maxSize = 2 * n - 1;
+    Node* nodes[maxSize];
+    int size = 0;
+    for (int i = 0; i < n; ++i) {
+        Node* node = new Node(chars[i], frequencies[i]);
+        nodes[size] = node;
+        size++;
+    }
+    while (size > 1) {
+        Node* leftNode = nodes[size - 1];
+        Node* rightNode = nodes[size - 2];
+        Node* combinedNode = new Node('\0', leftNode->frequency + rightNode->frequency);
+        combinedNode->left = leftNode;
+        combinedNode->right = rightNode;
+        size -= 2;
+        insertIntoArray(nodes, size, combinedNode);
+    }
+    return nodes[0];
+}
+
+void calculateCodeLengths(Node* root, std::string code, int depth, double& totalCodeLength, double& totalFrequency) {
+    if (root == nullptr) {
+        return;
+    }
+
+    if (root->data != '\0') {
+        cout << root->data << ": " << code << " (Code Length: " << depth << ")"<<"\n";
+        totalCodeLength += depth * root->frequency;
+        totalFrequency += root->frequency;
+    }
+
+    calculateCodeLengths(root->left, code + "0", depth + 1, totalCodeLength, totalFrequency);
+    calculateCodeLengths(root->right, code + "1", depth + 1, totalCodeLength, totalFrequency);
+}
+
+void deleteTree(Node* root) {
+    if (root == nullptr) {
+        return;
+    }
+    deleteTree(root->left);
+    deleteTree(root->right);
+    delete root;
+}
+
+int main() {
+    int n;
+    cin >> n;
+
+    char chars[n];
+    int frequencies[n];
+
+    for (int i = 0; i < n; ++i) {
+        cin >> chars[i] >> frequencies[i];
+    }
+
+    Node* root = buildHuffmanTree(chars, frequencies, n);
+
+    cout << "Huffman codes:" << endl;
+    double totalCodeLength = 0.0;
+    double totalFrequency = 0.0;
+    calculateCodeLengths(root, "", 0, totalCodeLength, totalFrequency);
+
+    double averageCodeLength = totalCodeLength / totalFrequency;
+    double expectedCodeLength = ceil(averageCodeLength);
+    cout << "Average Code Length: " << averageCodeLength << std::endl;
+    cout << "Expected Code Length: " << expectedCodeLength;
+
+    deleteTree(root);
+
+    return 0;
+}
+
+
+
+Problem Statement
+
+
+
+You are given a string of text containing various characters. You want to find the frequency of a specific character in the given text using Huffman's algorithm.
+
+
+
+Note: This kind of question will help in clearing HCL recruitment.
+
+Input format :
+The input consists of two lines:
+
+
+
+A string of text, str. (Note: The text may contain spaces and special characters.)
+
+A single character, checkCharacter, whose frequency needs to be determined in the given text.
+
+Output format :
+The output displays a single line containing the number of occurrences of "checkCharacter" in the string "str".
+
+If the character is not found in the text, print "<checkCharacter> not found".
+
+
+
+Refer to the sample output for exact specifications.
+
+Code constraints :
+The string consists of lowercase and uppercase letters and special characters.
+
+The character is a single alphabetical letter.
+
+The input string and characters are case-sensitive.
+
+The string may contain spaces or special characters.
+
+Sample test cases :
+Input 1 :
+Supercalifragilisticexpialidocious
+a
+Output 1 :
+Number of a = 3
+Input 2 :
+Supercalifragilisticexpialidocious
+z
+Output 2 :
+z not found
+
+
+
+#include <iostream>
+using namespace std;
+
+struct Node {
+    char character;
+    int frequency;
+    Node* left;
+    Node* right;
+};
+
+struct Compare {
+    bool operator()(Node* left, Node* right) {
+        return left->frequency > right->frequency;
+    }
+};
+
+Node* createNode(char character, int frequency) {
+    Node* node = new Node;
+    node->character = character;
+    node->frequency = frequency;
+    node->left = nullptr;
+    node->right = nullptr;
+    return node;
+}
+
+void encode(Node* root, string code, char checkCharacter, int& count) {
+    if (root == nullptr)
+        return;
+
+    if (root->character == checkCharacter)
+        count = root->frequency;
+
+    encode(root->left, code + "0", checkCharacter, count);
+    encode(root->right, code + "1", checkCharacter, count);
+}
+
+void huffman(string str, char checkCharacter) {
+    int frequency[256] = { 0 }; // Assuming ASCII characters, initialize with 0
+    for (char c : str) {
+        frequency[c]++;
+    }
+
+    Node* nodes[256];
+    int nodeCount = 0;
+    for (int i = 0; i < 256; i++) {
+        if (frequency[i] > 0) {
+            nodes[nodeCount++] = createNode((char)i, frequency[i]);
+        }
+    }
+
+    while (nodeCount > 1) {
+        int min1 = 0, min2 = 1;
+        if (nodes[min1]->frequency > nodes[min2]->frequency) {
+            swap(min1, min2);
+        }
+
+        for (int i = 2; i < nodeCount; i++) {
+            if (nodes[i]->frequency < nodes[min1]->frequency) {
+                min2 = min1;
+                min1 = i;
+            }
+            else if (nodes[i]->frequency < nodes[min2]->frequency) {
+                min2 = i;
+            }
+        }
+
+        Node* merged = createNode('\0', nodes[min1]->frequency + nodes[min2]->frequency);
+        merged->left = nodes[min1];
+        merged->right = nodes[min2];
+
+        nodes[min1] = merged;
+        nodes[min2] = nodes[nodeCount - 1];
+        nodeCount--;
+    }
+
+    Node* root = nodes[0];
+
+    int count = 0;
+    encode(root, "", checkCharacter, count);
+
+    if (count == 0) {
+        cout << checkCharacter << " not found";
+    }
+    else {
+        cout << "Number of " << checkCharacter << " = " << count << endl;
+    }
+}
+
+int main() {
+    string str;
+    cin >> str;
+    char checkCharacter;
+    cin >> checkCharacter;
+
+    huffman(str, checkCharacter);
+
+    return 0;
+}
+
+
+Question No: 2
+reportIcon
+Single File Programming Question
+Problem Statement
+
+
+
+Jessi is a computer science student who is fascinated by data compression techniques. Recently, she has been learning about Huffman coding, a popular method for lossless data compression. Intrigued by its efficiency, she decides to implement a Huffman coding program to compress a given text.
+
+
+
+However, Jessi is quite busy with her studies, and she needs your help to write the code for Huffman coding. Can you assist her in implementing the program?
+
+
+
+Write a program that takes input in the form of a frequency list of characters and their corresponding Huffman codes. The program should then read a text and output the compressed version of the text using Huffman coding.
+
+Input format :
+The first line of the input consists of an integer, 'count', representing the number of characters in the frequency list.
+
+The next 'count' lines contain two strings each, separated by a space.
+
+The first string is a single character representing a character, and the second string is its corresponding Huffman code.
+
+The next line of input contains the text that needs to be compressed.
+
+Output format :
+The output displays the compressed version of the given text using Huffman coding.
+
+Code constraints :
+1 <= count <= 26
+
+Each character in the frequency list will be a lowercase English alphabet ('a' to 'z').
+
+The Huffman codes will be binary strings consisting of only '0' and '1'.
+
+The length of the text to be compressed will not exceed 103 characters  string huffmanCodes[256];
+
+Sample test cases :
+Input 1 :
+10
+D 0100
+U 0000
+F 0101
+M 0001
+A 0010
+N 0011
+C 1100
+O 1101
+E 1110
+H 1111
+HUFF
+Output 1 :
+1110110111111111
+
+
+#include <iostream>
+using namespace std;
+
+struct Node {
+    char character;
+    int frequency;
+    Node* left;
+    Node* right;
+};
+
+struct Compare {
+    bool operator()(Node* left, Node* right) {
+        return left->frequency > right->frequency;
+    }
+};
+
+Node* createNode(char character, int frequency) {
+    Node* node = new Node;
+    node->character = character;
+    node->frequency = frequency;
+    node->left = nullptr;
+    node->right = nullptr;
+    return node;
+}
+
+Node* buildHuffmanTree(string data[], string flc[], int count) {
+    Node* nodes[count];
+    for (int i = 0; i < count; i++) {
+        nodes[i] = createNode(data[i][0], flc[i].size());
+    }
+
+    while (count > 1) {
+        int min1 = 0, min2 = 1;
+        if (nodes[min1]->frequency > nodes[min2]->frequency) {
+            swap(min1, min2);
+        }
+
+        for (int i = 2; i < count; i++) {
+            if (nodes[i]->frequency < nodes[min1]->frequency) {
+                min2 = min1;
+                min1 = i;
+            }
+            else if (nodes[i]->frequency < nodes[min2]->frequency) {
+                min2 = i;
+            }
+        }
+
+        Node* merged = createNode('\0', nodes[min1]->frequency + nodes[min2]->frequency);
+        merged->left = nodes[min1];
+        merged->right = nodes[min2];
+
+        nodes[min1] = merged;
+        nodes[min2] = nodes[count - 1];
+        count--;
+    }
+
+    return nodes[0];
+}
+
+void generateHuffmanCodes(Node* root, string code, string huffmanCodes[]) {
+    if (root == nullptr)
+        return;
+
+    if (root->character != '\0')
+        huffmanCodes[root->character] = code;
+
+    generateHuffmanCodes(root->left, code + "0", huffmanCodes);
+    generateHuffmanCodes(root->right, code + "1", huffmanCodes);
+}
+
+int main() {
+    int count;
+    cin >> count;
+    string data[count];
+    string flc[count];
+
+    for (int i = 0; i < count; i++) {
+        cin >> data[i] >> flc[i];
+    }
+
+    Node* root = buildHuffmanTree(data, flc, count);
+
+    string huffmanCodes[256]; // Assuming ASCII characters, initialize with empty string
+    generateHuffmanCodes(root, "", huffmanCodes);
+
+    string text;
+    cin >> text;
+    for (char ch : text) {
+        if (!huffmanCodes[ch].empty()) {
+            cout << huffmanCodes[ch];
+        }
+    }
+    cout << endl;
+}
+
+
+Problem Statement
+
+
+
+Uma is learning about data compression techniques and wants to understand how Huffman coding works. She decides to write a program to generate the frequency table of characters in a given input text.
+
+
+
+Write a program that takes an input text and generates the frequency table of characters in the text using the Huffman algorithm.
+
+
+
+Note: This kind of question will help in clearing HCL recruitment.
+
+Input format :
+The input consists of a single line containing a string representing the input text.
+
+The input text may contain lowercase English alphabets ('a' to 'z') and spaces.
+
+Output format :
+The output displays the frequency table of characters in the input text.
+
+Each line of the output should contain a character followed by its frequency, separated by a colon.
+
+The characters in the output should be in ascending order of their ASCII values.
+
+
+
+Refer to the sample output for exact specifications.
+
+Code constraints :
+The string consists only of lowercase letters
+
+The length of the input text will not exceed 102 characters.
+
+The input text may contain spaces but no other special characters.
+
+The input text will contain at least one character.
+
+Sample test cases :
+Input 1 :
+supercalifragilisticexpialidocious
+Output 1 :
+The frequency table is:
+a: 3
+c: 3
+d: 1
+e: 2
+f: 1
+g: 1
+i: 7
+l: 3
+o: 2
+p: 2
+r: 2
+s: 3
+t: 1
+u: 2
+x: 1
+
+
+
+#include <iostream>
+using namespace std;
+
+struct Node {
+    char character;
+    int frequency;
+    Node* left;
+    Node* right;
+
+    Node(char ch, int freq) {
+        character = ch;
+        frequency = freq;
+        left = right = nullptr;
+    }
+};
+
+void swap(Node* &a, Node* &b) {
+    Node* temp = a;
+    a = b;
+    b = temp;
+}
+
+void minHeapify(Node* nodes[], int n, int i) {
+    int smallest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && nodes[left]->frequency < nodes[smallest]->frequency)
+        smallest = left;
+
+    if (right < n && nodes[right]->frequency < nodes[smallest]->frequency)
+        smallest = right;
+
+    if (smallest != i) {
+        swap(nodes[i], nodes[smallest]);
+        minHeapify(nodes, n, smallest);
+    }
+}
+
+void buildMinHeap(Node* nodes[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        minHeapify(nodes, n, i);
+    }
+}
+
+Node* extractMin(Node* nodes[], int& n) {
+    Node* root = nodes[0];
+    nodes[0] = nodes[n - 1];
+    n--;
+    minHeapify(nodes, n, 0);
+    return root;
+}
+
+void insertMinHeap(Node* nodes[], int& n, Node* newNode) {
+    n++;
+    int i = n - 1;
+    while (i > 0 && newNode->frequency < nodes[(i - 1) / 2]->frequency) {
+        nodes[i] = nodes[(i - 1) / 2];
+        i = (i - 1) / 2;
+    }
+    nodes[i] = newNode;
+}
+
+Node* buildHuffmanTree(char characters[], int frequencies[], int count) {
+    Node* nodes[count];
+    for (int i = 0; i < count; i++) {
+        nodes[i] = new Node(characters[i], frequencies[i]);
+    }
+
+    buildMinHeap(nodes, count);
+
+    while (count > 1) {
+        Node* left = extractMin(nodes, count);
+        Node* right = extractMin(nodes, count);
+        Node* merged = new Node('\0', left->frequency + right->frequency);
+        merged->left = left;
+        merged->right = right;
+        insertMinHeap(nodes, count, merged);
+    }
+
+    return nodes[0];
+}
+
+int main() {
+    int count = 26;
+    char arr[count];
+    int freq[count] = {0};
+
+    string inputText;
+    cin >> inputText;
+    for (int i = 0; i < inputText.length(); i++) {
+        char c = inputText.at(i);
+        int asciival = c - 'a';
+        arr[asciival] = c;
+        freq[asciival]++;
+    }
+
+    int counter = 0;
+    for (int i = 0; i < count; i++) {
+        if (freq[i] != 0) {
+            counter++;
+        }
+    }
+
+    char newarr[counter];
+    int newfreq[counter];
+    int k = 0;
+    for (int i = 0; i < count; i++) {
+        if (freq[i] != 0) {
+            newarr[k] = arr[i];
+            newfreq[k++] = freq[i];
+        }
+    }
+
+    Node* root = buildHuffmanTree(newarr, newfreq, counter);
+
+    cout << "The frequency table is:" << endl;
+    for (int i = 0; i < k; i++) {
+        cout << newarr[i] << ": " << newfreq[i] << endl;
+    }
+    cout << endl;
+
+    return 0;
+}
+
+
+Problem Statement
+
+
+
+Jessi is working on a secret message that she wants to decode using the Huffman algorithm. The message has been encoded using variable-length binary codes. She needs your help to decode the message and reveal its original content.
+
+
+
+Write a program to decode the secret message using the Huffman algorithm.
+
+
+
+Example
+
+
+
+Input
+
+10
+
+D 0100
+
+U 0000
+
+F 0101
+
+M 0001
+
+A 0010
+
+N 0011
+
+C 1100
+
+O 1101
+
+E 1110
+
+H 1111
+
+1111000001010101
+
+
+
+Output
+
+Decoded Output: C H O O H H H
+
+
+
+Explanation:
+
+The first line of input specifies that there are 10 character-frequency pairs.
+
+The next 10 lines contain the pairs:
+
+'D' appears 4 times with the binary code 0100.
+'U' appears 0 times (unused) with the binary code 0000.
+'F' appears 1 time with the binary code 0101.
+'M' appears 1 time with the binary code 0001.
+'A' appears 2 times with the binary code 0010.
+'N' appears 3 times with the binary code 0011.
+'C' appears 4 times with the binary code 1100.
+'O' appears 4 times with the binary code 1101.
+'E' appears 4 times with the binary code 1110.
+'H' appears 4 times with the binary code 1111.
+The last line of input is the encoded message: 1111000001010101
+
+The output is the decoded message: C H O O H H H
+
+Input format :
+The input consists of the following:
+
+
+
+The first line contains an integer count, representing the number of characters in the encoded message.
+
+The next count lines contain character-frequency pairs separated by a space. Each pair consists of a lowercase English letter (a–z) and its corresponding frequency in the encoded message.
+
+The frequency of each character is a positive integer.
+
+Output format :
+The output displays the decoded message on a single line.
+
+
+
+Refer to the sample output for the formatting specifications.
+
+Code constraints :
+The input characters will only be lowercase English letters (a-z).
+
+The encoded message will contain at least one character.
+
+The total number of characters in the encoded message will not exceed 105.
+
+Sample test cases :
+Input 1 :
+10
+D 0100
+U 0000
+F 0101
+M 0001
+A 0010
+N 0011
+C 1100
+O 1101
+E 1110
+H 1111
+1111000001010101
+Output 1 :
+Decoded Output: C H O O H H H 
+
+
+#include <iostream>
+using namespace std;
+
+struct Node {
+    char character;
+    int frequency;
+    Node* left;
+    Node* right;
+
+    Node(char ch, int freq) {
+        character = ch;
+        frequency = freq;
+        left = right = nullptr;
+    }
+};
+
+void swap(Node* &a, Node* &b) {
+    Node* temp = a;
+    a = b;
+    b = temp;
+}
+
+void minHeapify(Node* nodes[], int n, int i) {
+    int smallest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && nodes[left]->frequency < nodes[smallest]->frequency)
+        smallest = left;
+
+    if (right < n && nodes[right]->frequency < nodes[smallest]->frequency)
+        smallest = right;
+
+    if (smallest != i) {
+        swap(nodes[i], nodes[smallest]);
+        minHeapify(nodes, n, smallest);
+    }
+}
+
+void buildMinHeap(Node* nodes[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        minHeapify(nodes, n, i);
+    }
+}
+
+Node* extractMin(Node* nodes[], int& n) {
+    Node* root = nodes[0];
+    nodes[0] = nodes[n - 1];
+    n--;
+    minHeapify(nodes, n, 0);
+    return root;
+}
+
+void insertMinHeap(Node* nodes[], int& n, Node* newNode) {
+    n++;
+    int i = n - 1;
+    while (i > 0 && newNode->frequency < nodes[(i - 1) / 2]->frequency) {
+        nodes[i] = nodes[(i - 1) / 2];
+        i = (i - 1) / 2;
+    }
+    nodes[i] = newNode;
+}
+
+Node* buildHuffmanTree(char data[], int frequencies[], int count) {
+    Node* nodes[count];
+    for (int i = 0; i < count; i++) {
+        nodes[i] = new Node(data[i], frequencies[i]);
+    }
+
+    buildMinHeap(nodes, count);
+
+    while (count > 1) {
+        Node* left = extractMin(nodes, count);
+        Node* right = extractMin(nodes, count);
+        Node* merged = new Node('\0', left->frequency + right->frequency);
+        merged->left = left;
+        merged->right = right;
+        insertMinHeap(nodes, count, merged);
+    }
+
+    return nodes[0];
+}
+
+void decodeHuffman(Node* root, string text) {
+    Node* current = root;
+    for (char ch : text) {
+        if (ch == '0') {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
+
+        if (current->left == nullptr && current->right == nullptr) {
+            cout << current->character << " ";
+            current = root;
+        }
+    }
+}
+
+int main() {
+    int count;
+    cin >> count;
+    char data[count];
+    int frequencies[count];
+
+    for (int i = 0; i < count; i++) {
+        cin >> data[i] >> frequencies[i];
+    }
+
+    Node* root = buildHuffmanTree(data, frequencies, count);
+
+    string text;
+    cin >> text;
+
+    cout << "Decoded Output: ";
+    decodeHuffman(root, text);
+    cout << endl;
+
+    return 0;
+}
+
+
+
+
+Problem Statement:
+
+
+
+You are given a piece of text, and you want to perform Huffman encoding on it to generate Huffman codes for each unique character in the text. The Huffman code for each character will be a binary representation based on its frequency in the text. Your task is to implement the Huffman encoding algorithm and display the frequency table of characters along with their corresponding Huffman codes.
+
+
+
+Note: This kind of question will help in clearing Wipro recruitment.
+
+Input format :
+The input consists of a single line containing a string of lowercase English alphabets. The string length will not exceed 1000 characters
+
+Output format :
+The output will start with the frequency table of characters in the format "character: frequency". Each character should be displayed in the order of their appearance in the input text, and the frequency of each character should be displayed next to it.
+
+Then, the output should display the Huffman codes for each character in the format "character: code", where the code is a binary representation based on the Huffman encoding. The codes should be displayed in the same order as the characters appear in the frequency table.
+
+
+
+Refer to the sample output for the exact specifications.
+
+Code constraints :
+The input string will only contain lowercase English alphabets (a-z).
+
+The length of the input string will be at most 1000 characters.
+
+Sample test cases :
+Input 1 :
+lumos
+Output 1 :
+The frequency table is:
+l: 1
+m: 1
+o: 1
+s: 1
+u: 1
+
+The Huffman codes are:
+l: 00
+u: 01
+o: 10
+s: 110
+m: 111
+
+
+
+#include <cstdlib>
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+#define MAX_TREE_HT 100
+struct MinHeapNode {
+    char data;
+    unsigned freq;
+    struct MinHeapNode *left, *right;
+};
+struct MinHeap {
+    unsigned size;
+    unsigned capacity;
+    struct MinHeapNode** array;
+};
+ 
+struct MinHeapNode* newNode(char data, unsigned freq)
+{
+    struct MinHeapNode* temp = (struct MinHeapNode*)malloc(
+        sizeof(struct MinHeapNode));
+    temp->left = temp->right = NULL;
+    temp->data = data;
+    temp->freq = freq;
+ 
+    return temp;
+}
+struct MinHeap* createMinHeap(unsigned capacity)
+{
+    struct MinHeap* minHeap
+        = (struct MinHeap*)malloc(sizeof(struct MinHeap));
+    minHeap->size = 0;
+    minHeap->capacity = capacity;
+    minHeap->array = (struct MinHeapNode**)malloc(
+        minHeap->capacity * sizeof(struct MinHeapNode*));
+    return minHeap;
+}
+void swapMinHeapNode(struct MinHeapNode** a,
+                     struct MinHeapNode** b)
+{
+    struct MinHeapNode* t = *a;
+    *a = *b;
+    *b = t;
+}
+void minHeapify(struct MinHeap* minHeap, int idx)
+{
+    int smallest = idx;
+    int left = 2 * idx + 1;
+    int right = 2 * idx + 2;
+    if (left < minHeap->size
+        && minHeap->array[left]->freq
+               < minHeap->array[smallest]->freq)
+        smallest = left;
+ 
+    if (right < minHeap->size
+        && minHeap->array[right]->freq
+               < minHeap->array[smallest]->freq)
+        smallest = right;
+ 
+    if (smallest != idx) {
+        swapMinHeapNode(&minHeap->array[smallest],
+                        &minHeap->array[idx]);
+        minHeapify(minHeap, smallest);
+    }
+}
+int isSizeOne(struct MinHeap* minHeap)
+{
+ 
+    return (minHeap->size == 1);
+}
+struct MinHeapNode* extractMin(struct MinHeap* minHeap)
+{
+    struct MinHeapNode* temp = minHeap->array[0];
+    minHeap->array[0] = minHeap->array[minHeap->size - 1];
+    --minHeap->size;
+    minHeapify(minHeap, 0);
+    return temp;
+}
+void insertMinHeap(struct MinHeap* minHeap,
+                   struct MinHeapNode* minHeapNode)
+{
+    ++minHeap->size;
+    int i = minHeap->size - 1;
+    while (i
+           && minHeapNode->freq
+                  < minHeap->array[(i - 1) / 2]->freq) {
+        minHeap->array[i] = minHeap->array[(i - 1) / 2];
+        i = (i - 1) / 2;
+    }
+    minHeap->array[i] = minHeapNode;
+}
+void buildMinHeap(struct MinHeap* minHeap)
+{
+    int n = minHeap->size - 1;
+    int i;
+    for (i = (n - 1) / 2; i >= 0; --i)
+        minHeapify(minHeap, i);
+}
+int isLeaf(struct MinHeapNode* root)
+{
+    return !(root->left) && !(root->right);
+}
+struct MinHeap* createAndBuildMinHeap(char data[], int freq[], int size)
+{
+    struct MinHeap* minHeap = createMinHeap(size);
+    for (int i = 0; i < size; ++i)
+        minHeap->array[i] = newNode(data[i], freq[i]);
+    minHeap->size = size;
+    buildMinHeap(minHeap);
+    return minHeap;
+}
+struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size);
+void print_encoded_text(string text);
+struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size)
+{
+    struct MinHeapNode *left, *right, *top;
+    struct MinHeap* minHeap = createAndBuildMinHeap(data, freq, size);
+    while (!isSizeOne(minHeap)) {
+        left = extractMin(minHeap);
+        right = extractMin(minHeap);
+        top = newNode('$', left->freq + right->freq);
+        top->left = left;
+        top->right = right;
+        insertMinHeap(minHeap, top);
+    }
+    return extractMin(minHeap);
+}
+string codes[1000];
+string chars[1000];
+static int ci = 0;
+string printArr(int arr[], int n)
+{
+    string s = "";
+    int i;
+    for (i = 0; i < n; ++i){
+        cout << arr[i];
+        s = s+to_string(arr[i]);
+    }
+ 
+    cout << "\n";
+    return s;
+}
+void printCodes(struct MinHeapNode* root, int arr[],
+                int top)
+ 
+{
+    if (root->left) {
+ 
+        arr[top] = 0;
+        printCodes(root->left, arr, top + 1);
+    }
+    if (root->right) {
+ 
+        arr[top] = 1;
+        printCodes(root->right, arr, top + 1);
+    }
+    if (isLeaf(root)) {
+ 
+        cout << root->data << ": ";
+        chars[ci] = root->data;
+        codes[ci++]=printArr(arr, top);
+    }
+}
+void HuffmanCodes(char data[], int freq[], int size)
+{
+    struct MinHeapNode* root
+        = buildHuffmanTree(data, freq, size);
+    int arr[MAX_TREE_HT], top = 0;
+    printCodes(root, arr, top);
+}
+int main()
+{
+	int count = 26;
+	char arr[count];
+	int freq[count] = {0};
+	string inputText;
+	cin>>inputText;
+	for(int i=0;i<inputText.length();i++){
+	    char c=inputText.at(i);
+	    int asciival = c - 97;
+	    arr[asciival] = c;
+	    freq[asciival]++;
+	}
+	int counter=0;
+	for(int i=0;i<count;i++){
+	    if(freq[i]!=0){
+	        counter++;
+	    }
+	}
+	char newarr[counter];
+	int newfreq[counter];
+	int k=0;
+	for(int i=0;i<count;i++){
+	    if(freq[i]!=0){
+	        newarr[k] = arr[i];
+	        newfreq[k++]=freq[i];
+	    }
+	}
+	cout<<"The frequency table is:"<<endl;
+	for(int i=0;i<k;i++){
+	    cout<<newarr[i]<<": "<<newfreq[i]<<endl;
+	}
+	cout<<endl;
+	cout<<"The Huffman codes are:"<<endl;
+	int size = sizeof(newarr) / sizeof(newarr[0]);
+	HuffmanCodes(newarr, newfreq, size);
+	return 0;
+}
+ 
+
+
+
+Problem Statement
+
+
+
+You are working as a software developer for a data compression company. Your task is to implement the Huffman coding algorithm to compress and decompress text data efficiently. Huffman coding is a widely used technique for lossless data compression. It assigns variable-length codes to characters in such a way that more frequent characters are assigned shorter codes, resulting in reduced storage requirements for the text.
+
+
+
+Note: This kind of question will help in clearing TCS recruitment.
+
+Input format :
+The input consists of several lines of data.
+
+The first line contains an integer, 'count', representing the number of distinct characters in the text.
+
+The following 'count' lines each contain a character (uppercase alphabets only) and its corresponding frequency (a positive integer), separated by a space.
+
+After the character-frequency pairs, a new line follows, containing the text that needs to be compressed and decompressed using Huffman coding.
+
+Output format :
+The output displays the decompressed text after applying Huffman coding and decoding.
+
+The output should be a single line containing the original text.
+
+
+
+Refer to the sample output for formatting specifications.
+
+Code constraints :
+The count of distinct characters ('count') is at most 100.
+
+The frequency of characters is a positive integer.
+
+The input text contains only lowercase alphabets and has a length of at most 1000 characters.
+
+Sample test cases :
+Input 1 :
+10
+R       22
+I       20
+H       15
+U       15
+C       11
+L       11
+F       9
+M       9
+B       8
+D       7
+001101110010
+Output 1 :
+R: 00
+H: 010
+U: 011
+D: 1000
+B: 1001
+M: 1010
+F: 1011
+I: 110
+C: 1110
+L: 1111
+RICH
+
+#include <cstdlib>
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+#define MAX_TREE_HT 100
+
+struct MinHeapNode {
+    char data;
+    unsigned freq;
+    struct MinHeapNode* left, *right;
+};
+
+struct MinHeap {
+    unsigned size;
+    unsigned capacity;
+    struct MinHeapNode** array;
+};
+
+struct MinHeapNode* newNode(char data, unsigned freq) {
+    struct MinHeapNode* temp = (struct MinHeapNode*)malloc(sizeof(struct MinHeapNode));
+    temp->left = temp->right = NULL;
+    temp->data = data;
+    temp->freq = freq;
+    return temp;
+}
+
+struct MinHeap* createMinHeap(unsigned capacity) {
+    struct MinHeap* minHeap = (struct MinHeap*)malloc(sizeof(struct MinHeap));
+    minHeap->size = 0;
+    minHeap->capacity = capacity;
+    minHeap->array = (struct MinHeapNode**)malloc(minHeap->capacity * sizeof(struct MinHeapNode*));
+    return minHeap;
+}
+
+void swapMinHeapNode(struct MinHeapNode** a, struct MinHeapNode** b) {
+    struct MinHeapNode* t = *a;
+    *a = *b;
+    *b = t;
+}
+
+void minHeapify(struct MinHeap* minHeap, int idx) {
+    int smallest = idx;
+    int left = 2 * idx + 1;
+    int right = 2 * idx + 2;
+
+    if (left < minHeap->size && minHeap->array[left]->freq < minHeap->array[smallest]->freq)
+        smallest = left;
+
+    if (right < minHeap->size && minHeap->array[right]->freq < minHeap->array[smallest]->freq)
+        smallest = right;
+
+    if (smallest != idx) {
+        swapMinHeapNode(&minHeap->array[smallest], &minHeap->array[idx]);
+        minHeapify(minHeap, smallest);
+    }
+}
+
+int isSizeOne(struct MinHeap* minHeap) {
+    return (minHeap->size == 1);
+}
+
+struct MinHeapNode* extractMin(struct MinHeap* minHeap) {
+    struct MinHeapNode* temp = minHeap->array[0];
+    minHeap->array[0] = minHeap->array[minHeap->size - 1];
+    --minHeap->size;
+    minHeapify(minHeap, 0);
+    return temp;
+}
+
+void insertMinHeap(struct MinHeap* minHeap, struct MinHeapNode* minHeapNode) {
+    ++minHeap->size;
+    int i = minHeap->size - 1;
+    while (i && minHeapNode->freq < minHeap->array[(i - 1) / 2]->freq) {
+        minHeap->array[i] = minHeap->array[(i - 1) / 2];
+        i = (i - 1) / 2;
+    }
+    minHeap->array[i] = minHeapNode;
+}
+
+void buildMinHeap(struct MinHeap* minHeap) {
+    int n = minHeap->size - 1;
+    int i;
+    for (i = (n - 1) / 2; i >= 0; --i)
+        minHeapify(minHeap, i);
+}
+
+int isLeaf(struct MinHeapNode* root) {
+    return !(root->left) && !(root->right);
+}
+
+struct MinHeap* createAndBuildMinHeap(char data[], int freq[], int size) {
+    struct MinHeap* minHeap = createMinHeap(size);
+    for (int i = 0; i < size; ++i)
+        minHeap->array[i] = newNode(data[i], freq[i]);
+    minHeap->size = size;
+    buildMinHeap(minHeap);
+    return minHeap;
+}
+
+struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size);
+
+void print_encoded_text(string text);
+
+struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size) {
+    struct MinHeapNode* left, *right, *top;
+    struct MinHeap* minHeap = createAndBuildMinHeap(data, freq, size);
+
+    while (!isSizeOne(minHeap)) {
+        left = extractMin(minHeap);
+        right = extractMin(minHeap);
+        top = newNode('$', left->freq + right->freq);
+        top->left = left;
+        top->right = right;
+        insertMinHeap(minHeap, top);
+    }
+    return extractMin(minHeap);
+}
+
+string codes[1000];
+char chars[1000];
+static int ci = 0;
+string printArr(int arr[], int n) {
+    string s = "";
+    int i;
+    for (i = 0; i < n; ++i) {
+        cout << arr[i];
+        s = s + to_string(arr[i]);
+    }
+    cout << "\n";
+    return s;
+}
+
+void printCodes(struct MinHeapNode* root, int arr[], int top) {
+    if (root->left) {
+        arr[top] = 0;
+        printCodes(root->left, arr, top + 1);
+    }
+    if (root->right) {
+        arr[top] = 1;
+        printCodes(root->right, arr, top + 1);
+    }
+    if (isLeaf(root)) {
+        cout << root->data << ": ";
+        chars[ci] = root->data;
+        codes[ci++] = printArr(arr, top);
+    }
+}
+
+void print_encoded_text(string text) {
+    cout << "The encoded value for " << text << " is:" << endl;
+    for (int i = 0; i < text.length(); i++) {
+        for (int j = 0; j < ci; j++) {
+            if (text.at(i) == chars[j]) {
+                cout << codes[j] << "";
+            }
+        }
+    }
+    cout << endl;
+}
+
+struct MinHeapNode* HuffmanCodes(char data[], int freq[], int size) {
+    struct MinHeapNode* root = buildHuffmanTree(data, freq, size);
+    int arr[MAX_TREE_HT], top = 0;
+    printCodes(root, arr, top);
+    return root;
+}
+
+// Function to return the decoded string.
+string decodeHuffmanData(struct MinHeapNode* root, string binaryString) {
+    string res = "";
+    MinHeapNode* cur = root;
+    for (char c : binaryString) {
+        if (c == '0')
+            cur = cur->left;
+        else
+            cur = cur->right;
+        if (cur->data != '$') {
+            res += cur->data;
+            cur = root;
+        }
+    }
+    return res;
+}
+
+int main() {
+    int count;
+    cin >> count;
+
+    char arr[count];
+    int freq[count];
+    for (int i = 0; i < count; i++) {
+        cin >> arr[i] >> freq[i];
+    }
+    int size = sizeof(arr) / sizeof(arr[0]);
+    string text;
+    cin >> text;
+    struct MinHeapNode* root = HuffmanCodes(arr, freq, size);
+
+    //print_encoded_text(text);
+    string decodedText = decodeHuffmanData(root, text);
+    cout << decodedText << endl;
+    return 0;
+}
+
+
+
+
+You are planning to create a custom mobile application along the lines of Instagram but limited only to a closed community, like your friends. You want to be able to share files and images in the group, but some of them can be very large. One way is to compress them before sending them over the network. But before you can compress them, you need to ensure that you are using the optimal encoding mechanism to do the same.
+
+
+
+You want to try various encoding algorithms and evaluate their efficiency, and you want to start with Huffman encoding. Write a program that accepts a set of characters and their frequencies and generates the Huffman code for them. It should also evaluate the average code length that would be required to use Huffman coding on your files.
+
+
+
+Note: This kind of question will help in clearing Wipro recruitment.
+
+Input format :
+The input consists of multiple lines:
+
+
+
+The first line contains an integer "count" representing the number of characters.
+
+The next "count" lines contain the following information for each character:
+
+A character, "data [i]" (a single alphanumeric character).
+
+The frequency of the character "freq[i]" (an integer representing the frequency count).
+
+Output format :
+The output displays each character along with their codes.
+
+It is followed by a single line containing the average code length for Huffman Coding with the given codes.
+
+The output should be displayed with two decimal places of precision.
+
+
+
+Refer to the sample output for the exact specifications.
+
+Code constraints :
+The characters are alphanumeric (uppercase letters and digits).
+
+The frequencies are positive integers.
+
+The Huffman codes are valid binary codes (consisting of '0' and '1').
+
+The sum of frequencies will not exceed 106.
+
+1 <= count <= 10
+
+Sample test cases :
+Input 1 :
+5
+E	33
+T	28
+I	19
+L	18
+A	17
+Output 1 :
+I: 00
+T: 01
+E: 10
+A: 110
+L: 111
+Average code length for Huffman Coding with the given codes is: 265/115 = 2.3
+
+
+
+#include <cstdlib>
+#include <iostream>
+#include <iomanip>
+#include <cstring>
+using namespace std;
+ 
+
+#define MAX_TREE_HT 100
+ 
+
+struct MinHeapNode {
+ 
+
+    char data;
+ 
+
+    unsigned freq;
+ 
+
+    struct MinHeapNode *left, *right;
+};
+
+struct MinHeap {
+ 
+
+    unsigned size;
+ 
+
+    unsigned capacity;
+ 
+    struct MinHeapNode** array;
+};
+ 
+struct MinHeapNode* newNode(char data, unsigned freq)
+{
+    struct MinHeapNode* temp = (struct MinHeapNode*)malloc(
+        sizeof(struct MinHeapNode));
+ 
+    temp->left = temp->right = NULL;
+    temp->data = data;
+    temp->freq = freq;
+ 
+    return temp;
+}
+ 
+struct MinHeap* createMinHeap(unsigned capacity)
+ 
+{
+ 
+    struct MinHeap* minHeap
+        = (struct MinHeap*)malloc(sizeof(struct MinHeap));
+ 
+    minHeap->size = 0;
+ 
+    minHeap->capacity = capacity;
+ 
+    minHeap->array = (struct MinHeapNode**)malloc(
+        minHeap->capacity * sizeof(struct MinHeapNode*));
+    return minHeap;
+}
+ 
+
+void swapMinHeapNode(struct MinHeapNode** a,
+                     struct MinHeapNode** b)
+ 
+{
+ 
+    struct MinHeapNode* t = *a;
+    *a = *b;
+    *b = t;
+}
+ 
+void minHeapify(struct MinHeap* minHeap, int idx)
+ 
+{
+ 
+    int smallest = idx;
+    int left = 2 * idx + 1;
+    int right = 2 * idx + 2;
+ 
+    if (left < minHeap->size
+        && minHeap->array[left]->freq
+              < minHeap->array[smallest]->freq)
+        smallest = left;
+ 
+    if (right < minHeap->size
+        && minHeap->array[right]->freq
+              < minHeap->array[smallest]->freq)
+        smallest = right;
+ 
+    if (smallest != idx) {
+        swapMinHeapNode(&minHeap->array[smallest],
+                        &minHeap->array[idx]);
+        minHeapify(minHeap, smallest);
+    }
+}
+
+int isSizeOne(struct MinHeap* minHeap)
+{
+ 
+    return (minHeap->size == 1);
+}
+ 
+
+struct MinHeapNode* extractMin(struct MinHeap* minHeap)
+ 
+{
+ 
+    struct MinHeapNode* temp = minHeap->array[0];
+    minHeap->array[0] = minHeap->array[minHeap->size - 1];
+ 
+    --minHeap->size;
+    minHeapify(minHeap, 0);
+ 
+    return temp;
+}
+ 
+
+void insertMinHeap(struct MinHeap* minHeap,
+                  struct MinHeapNode* minHeapNode)
+ 
+{
+ 
+    ++minHeap->size;
+    int i = minHeap->size - 1;
+ 
+    while (i
+          && minHeapNode->freq
+                  < minHeap->array[(i - 1) / 2]->freq) {
+ 
+        minHeap->array[i] = minHeap->array[(i - 1) / 2];
+        i = (i - 1) / 2;
+    }
+ 
+    minHeap->array[i] = minHeapNode;
+}
+ 
+void buildMinHeap(struct MinHeap* minHeap)
+ 
+{
+ 
+    int n = minHeap->size - 1;
+    int i;
+ 
+    for (i = (n - 1) / 2; i >= 0; --i)
+        minHeapify(minHeap, i);
+}
+
+
+int isLeaf(struct MinHeapNode* root)
+ 
+{
+ 
+    return !(root->left) && !(root->right);
+}
+ 
+struct MinHeap* createAndBuildMinHeap(char data[], int freq[], int size)
+ 
+{
+ 
+    struct MinHeap* minHeap = createMinHeap(size);
+ 
+    for (int i = 0; i < size; ++i)
+        minHeap->array[i] = newNode(data[i], freq[i]);
+ 
+    minHeap->size = size;
+    buildMinHeap(minHeap);
+ 
+    return minHeap;
+}
+ 
+struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size);
+
+void print_encoded_text(string text);
+
+struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size)
+ 
+{
+    struct MinHeapNode *left, *right, *top;
+
+    struct MinHeap* minHeap = createAndBuildMinHeap(data, freq, size);
+ 
+    while (!isSizeOne(minHeap)) {
+ 
+
+        left = extractMin(minHeap);
+        right = extractMin(minHeap);
+ 
+        top = newNode('$', left->freq + right->freq);
+ 
+        top->left = left;
+        top->right = right;
+ 
+        insertMinHeap(minHeap, top);
+    }
+ 
+    return extractMin(minHeap);
+}
+ 
+ string codes[1000];
+char chars[1000];
+static int ci = 0;
+string printArr(int arr[], int n)
+{
+    string s = "";
+    int i;
+    for (i = 0; i < n; ++i){
+        cout << arr[i];
+        s = s+to_string(arr[i]);
+    }
+ 
+    cout << "\n";
+    return s;
+}
+
+void printCodes(struct MinHeapNode* root, int arr[],
+                int top)
+ 
+{
+ 
+ 
+    if (root->left) {
+ 
+        arr[top] = 0;
+        printCodes(root->left, arr, top + 1);
+    }
+ 
+
+    if (root->right) {
+ 
+        arr[top] = 1;
+        printCodes(root->right, arr, top + 1);
+    }
+
+    if (isLeaf(root)) {
+ 
+        cout << root->data << ": ";
+        chars[ci] = root->data;
+        codes[ci++]=printArr(arr, top);
+    }
+}
+
+
+void print_encoded_text(string text){
+        cout<<"The encoded value for "<<text<<" is:"<<endl;
+        for(int i=0;i<text.length();i++){
+            for(int j=0;j<ci;j++){
+                if(text.at(i)==chars[j]){
+                    cout<<codes[j]<<"";
+                }
+            }
+        }
+        cout<<endl;
+       
+        
+    
+}
+
+
+void HuffmanCodes(char data[], int freq[], int size)
+ 
+{
+    struct MinHeapNode* root
+        = buildHuffmanTree(data, freq, size);
+ 
+ 
+    int arr[MAX_TREE_HT], top = 0;
+ 
+    printCodes(root, arr, top);
+}
+ 
+
+int main()
+{
+ 
+	int count;
+	cin>>count;
+
+	char arr[count];
+	int freq[count];
+	for(int i=0;i<count;i++){
+		cin>>arr[i]>>freq[i];
+	}
+	int size = sizeof(arr) / sizeof(arr[0]);
+
+	HuffmanCodes(arr, freq, size);
+	int total=0;
+	int freqtotal = 0;
+	for(int i =0;i<count;i++){
+	    total = total + (codes[i].length()* freq[i]);
+	    freqtotal = freqtotal + freq[i];
+	}
+	double avg = (double)total/freqtotal;
+	cout<<"Average code length for Huffman Coding with the given codes is: "<<total<<"/"<<freqtotal<<" = "<<setprecision (2)<<avg;
+	cout<<endl;
+
+	return 0;
+}
+ 
+
+
+
+
+You are working as a software developer for a data compression company. Your task is to implement the Huffman coding algorithm to compress and decompress text data efficiently. Huffman coding is a widely used technique for lossless data compression. It assigns variable-length codes to characters in such a way that more frequent characters are assigned shorter codes, resulting in reduced storage requirements for the text. Additionally, you need to create a function to decrypt the compressed text back to its original form.
+
+
+
+Note: This kind of question will help in clearing TCS recruitment.
+
+Input format :
+The input consists of several lines of data
+
+The first line contains an integer, 'count', representing the number of distinct characters in the text.
+
+The following 'count' lines each contain a character (lowercase alphabets only) and its corresponding frequency (a positive integer), separated by a space.
+
+These lines represent the frequency of each character in the given text. After the character-frequency pairs, a new line follows, containing the compressed binary text that needs to be decrypted using Huffman coding.
+
+Output format :
+The output displays the decompressed text after applying Huffman coding and decoding.
+
+
+
+Refer to the sample output for formatting specifications.
+
+Code constraints :
+The count of distinct characters ('count') is at most 100.
+
+The frequency of characters is a positive integer.
+
+The input text contains only lowercase alphabets and has a length of at most 1000 characters.
+
+Sample test cases :
+Input 1 :
+10
+N	25
+R	25
+H	23
+S	22
+D	14
+C	13
+M	11
+B	9
+P	9
+F	8
+Output 1 :
+C: 000
+D: 001
+F: 0100
+B: 0101
+P: 0110
+M: 0111
+S: 100
+H: 101
+N: 110
+R: 111
+
+
+
+#include <cstdlib>
+#include <iostream>
+#include <cstring>
+using namespace std;
+ 
+
+#define MAX_TREE_HT 100
+ 
+
+struct MinHeapNode {
+ 
+
+    char data;
+ 
+
+    unsigned freq;
+ 
+
+    struct MinHeapNode *left, *right;
+};
+
+struct MinHeap {
+ 
+
+    unsigned size;
+ 
+
+    unsigned capacity;
+ 
+    struct MinHeapNode** array;
+};
+ 
+struct MinHeapNode* newNode(char data, unsigned freq)
+{
+    struct MinHeapNode* temp = (struct MinHeapNode*)malloc(
+        sizeof(struct MinHeapNode));
+ 
+    temp->left = temp->right = NULL;
+    temp->data = data;
+    temp->freq = freq;
+ 
+    return temp;
+}
+ 
+struct MinHeap* createMinHeap(unsigned capacity)
+ 
+{
+ 
+    struct MinHeap* minHeap
+        = (struct MinHeap*)malloc(sizeof(struct MinHeap));
+ 
+    minHeap->size = 0;
+ 
+    minHeap->capacity = capacity;
+ 
+    minHeap->array = (struct MinHeapNode**)malloc(
+        minHeap->capacity * sizeof(struct MinHeapNode*));
+    return minHeap;
+}
+ 
+
+void swapMinHeapNode(struct MinHeapNode** a,
+                     struct MinHeapNode** b)
+ 
+{
+ 
+    struct MinHeapNode* t = *a;
+    *a = *b;
+    *b = t;
+}
+ 
+void minHeapify(struct MinHeap* minHeap, int idx)
+ 
+{
+ 
+    int smallest = idx;
+    int left = 2 * idx + 1;
+    int right = 2 * idx + 2;
+ 
+    if (left < minHeap->size
+        && minHeap->array[left]->freq
+              < minHeap->array[smallest]->freq)
+        smallest = left;
+ 
+    if (right < minHeap->size
+        && minHeap->array[right]->freq
+              < minHeap->array[smallest]->freq)
+        smallest = right;
+ 
+    if (smallest != idx) {
+        swapMinHeapNode(&minHeap->array[smallest],
+                        &minHeap->array[idx]);
+        minHeapify(minHeap, smallest);
+    }
+}
+
+int isSizeOne(struct MinHeap* minHeap)
+{
+ 
+    return (minHeap->size == 1);
+}
+ 
+
+struct MinHeapNode* extractMin(struct MinHeap* minHeap)
+ 
+{
+ 
+    struct MinHeapNode* temp = minHeap->array[0];
+    minHeap->array[0] = minHeap->array[minHeap->size - 1];
+ 
+    --minHeap->size;
+    minHeapify(minHeap, 0);
+ 
+    return temp;
+}
+ 
+
+void insertMinHeap(struct MinHeap* minHeap,
+                  struct MinHeapNode* minHeapNode)
+ 
+{
+ 
+    ++minHeap->size;
+    int i = minHeap->size - 1;
+ 
+    while (i
+          && minHeapNode->freq
+                  < minHeap->array[(i - 1) / 2]->freq) {
+ 
+        minHeap->array[i] = minHeap->array[(i - 1) / 2];
+        i = (i - 1) / 2;
+    }
+ 
+    minHeap->array[i] = minHeapNode;
+}
+ 
+void buildMinHeap(struct MinHeap* minHeap)
+ 
+{
+ 
+    int n = minHeap->size - 1;
+    int i;
+ 
+    for (i = (n - 1) / 2; i >= 0; --i)
+        minHeapify(minHeap, i);
+}
+
+
+int isLeaf(struct MinHeapNode* root)
+ 
+{
+ 
+    return !(root->left) && !(root->right);
+}
+ 
+struct MinHeap* createAndBuildMinHeap(char data[], int freq[], int size)
+ 
+{
+ 
+    struct MinHeap* minHeap = createMinHeap(size);
+ 
+    for (int i = 0; i < size; ++i)
+        minHeap->array[i] = newNode(data[i], freq[i]);
+ 
+    minHeap->size = size;
+    buildMinHeap(minHeap);
+ 
+    return minHeap;
+}
+ 
+struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size);
+
+void print_encoded_text(string text);
+
+struct MinHeapNode* buildHuffmanTree(char data[], int freq[], int size)
+ 
+{
+    struct MinHeapNode *left, *right, *top;
+
+    struct MinHeap* minHeap = createAndBuildMinHeap(data, freq, size);
+ 
+    while (!isSizeOne(minHeap)) {
+ 
+
+        left = extractMin(minHeap);
+        right = extractMin(minHeap);
+ 
+        top = newNode('$', left->freq + right->freq);
+ 
+        top->left = left;
+        top->right = right;
+ 
+        insertMinHeap(minHeap, top);
+    }
+ 
+    return extractMin(minHeap);
+}
+ 
+ string codes[1000];
+char chars[1000];
+static int ci = 0;
+string printArr(int arr[], int n)
+{
+    string s = "";
+    int i;
+    for (i = 0; i < n; ++i){
+        cout << arr[i];
+        s = s+to_string(arr[i]);
+    }
+ 
+    cout << "\n";
+    return s;
+}
+
+void printCodes(struct MinHeapNode* root, int arr[],
+                int top)
+ 
+{
+ 
+ 
+    if (root->left) {
+ 
+        arr[top] = 0;
+        printCodes(root->left, arr, top + 1);
+    }
+ 
+
+    if (root->right) {
+ 
+        arr[top] = 1;
+        printCodes(root->right, arr, top + 1);
+    }
+
+    if (isLeaf(root)) {
+ 
+        cout << root->data << ": ";
+        chars[ci] = root->data;
+        codes[ci++]=printArr(arr, top);
+    }
+}
+
+
+void print_encoded_text(string text){
+        cout<<"The encoded value for "<<text<<" is:"<<endl;
+        for(int i=0;i<text.length();i++){
+            for(int j=0;j<ci;j++){
+                if(text.at(i)==chars[j]){
+                    cout<<codes[j]<<"";
+                }
+            }
+        }
+        cout<<endl;
+       
+        
+    
+}
+
+
+void HuffmanCodes(char data[], int freq[], int size)
+ 
+{
+    struct MinHeapNode* root
+        = buildHuffmanTree(data, freq, size);
+ 
+ 
+    int arr[MAX_TREE_HT], top = 0;
+ 
+    printCodes(root, arr, top);
+}
+ 
+
+int main()
+{
+ 
+	int count;
+	cin>>count;
+
+	char arr[count];
+	int freq[count];
+	for(int i=0;i<count;i++){
+		cin>>arr[i]>>freq[i];
+	}
+	int size = sizeof(arr) / sizeof(arr[0]);
+
+	HuffmanCodes(arr, freq, size);
+// 	string text;
+// 	cin>>text;
+// 	print_encoded_text(text);
+
+	return 0;
+}
+ 
+
